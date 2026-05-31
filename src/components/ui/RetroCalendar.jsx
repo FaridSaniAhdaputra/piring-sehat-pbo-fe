@@ -1,7 +1,14 @@
 import { useState, useEffect } from 'react'
 
-export default function RetroCalendar({ selectedDate, onDateSelect }) {
+export default function RetroCalendar({ selectedDate, onDateSelect, activeDates = [], onMonthChange }) {
   const [currentMonth, setCurrentMonth] = useState(selectedDate || new Date())
+
+  // Memicu callback onMonthChange setiap kali bulan/tahun kalender berubah
+  useEffect(() => {
+    if (onMonthChange) {
+      onMonthChange(currentMonth.getFullYear(), currentMonth.getMonth() + 1)
+    }
+  }, [currentMonth.getFullYear(), currentMonth.getMonth(), onMonthChange])
 
   // Sinkronkan ketika selectedDate berubah dari luar
   useEffect(() => {
@@ -62,14 +69,22 @@ export default function RetroCalendar({ selectedDate, onDateSelect }) {
           btnClass += " border-2 border-[#000080] font-bold"
       }
 
+      // Cek apakah tanggal ini memiliki history
+      const currentDayStr = `${currentMonth.getFullYear()}-${String(currentMonth.getMonth() + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`
+      const hasHistory = activeDates.includes(currentDayStr)
+
+      // Kita gunakan relative container agar bisa menambahkan indikator di pojok
       days.push(
         <button 
           key={d} 
           onClick={() => handleDateClick(d)}
-          className={btnClass}
+          className={`${btnClass} relative`}
           type="button"
         >
           {d}
+          {hasHistory && (
+            <div className="absolute bottom-[2px] right-[2px] w-[4px] h-[4px] bg-red-600 rounded-full" title="Ada history kalori"></div>
+          )}
         </button>
       )
     }

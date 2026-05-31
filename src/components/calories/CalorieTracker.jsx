@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import RetroButton from '../ui/RetroButton'
 import RetroInput from '../ui/RetroInput'
 import RetroSelect from '../ui/RetroSelect'
@@ -27,6 +27,10 @@ export default function CalorieTracker() {
   const [entries, setEntries] = useState([])
   const [statusMessage, setStatusMessage] = useState('Ready')
   const [loading, setLoading] = useState(false)
+
+  // ─── Active Dates (Indikator Kalender) ───
+  const [activeDates, setActiveDates] = useState([])
+  const [currentCalendarMonth, setCurrentCalendarMonth] = useState(null)
 
   // ─── Auth ───
   const { session } = useAuth()
@@ -78,6 +82,27 @@ export default function CalorieTracker() {
       setLoading(false)
     }
   }
+
+  const fetchActiveDates = useCallback(async (year, month) => {
+    if (!session?.access_token) return
+    setCurrentCalendarMonth({ year, month })
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/calories/active-dates?year=${year}&month=${month}`, {
+        headers: {
+          'Authorization': `Bearer ${session.access_token}`
+        }
+      })
+      if (response.ok) {
+        const result = await response.json()
+        if (result.success) {
+          setActiveDates(result.data || [])
+        }
+      }
+    } catch (err) {
+      console.error('[CalorieTracker] Error fetching active dates:', err)
+    }
+  }, [session])
 
   useEffect(() => {
     fetchEntries()
@@ -145,6 +170,7 @@ export default function CalorieTracker() {
           mealType: newEntry.mealType,
         })
         fetchEntries() // Refresh data
+        if (currentCalendarMonth) fetchActiveDates(currentCalendarMonth.year, currentCalendarMonth.month)
       } else {
         throw new Error(result.message || 'Gagal menyimpan data')
       }
@@ -182,6 +208,7 @@ export default function CalorieTracker() {
       if (result.success) {
         setStatusMessage('Entry deleted')
         fetchEntries() // Refresh data
+        if (currentCalendarMonth) fetchActiveDates(currentCalendarMonth.year, currentCalendarMonth.month)
       } else {
         throw new Error(result.message || 'Gagal menghapus data')
       }
@@ -222,6 +249,8 @@ export default function CalorieTracker() {
           <RetroCalendar 
             selectedDate={selectedDate} 
             onDateSelect={setSelectedDate} 
+            activeDates={activeDates}
+            onMonthChange={fetchActiveDates}
           />
         </div>
         
