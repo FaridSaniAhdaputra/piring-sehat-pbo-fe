@@ -5,6 +5,7 @@ export default function RetroWindow({
   title,
   children,
   onClose,
+  onMinimize,
   onFocus,
   zIndex = 1,
   icon = '📁',
@@ -13,6 +14,7 @@ export default function RetroWindow({
   height = 400,
   isActive = false,
   resizable = false,
+  minimized = false,
 }) {
   const [position, setPosition] = useState(initialPosition)
   const [isDragging, setIsDragging] = useState(false)
@@ -63,8 +65,8 @@ export default function RetroWindow({
   }
 
   const style = isMaximized
-    ? { top: 0, left: 0, width: '100%', height: 'calc(100vh - 36px)', zIndex }
-    : { top: position.y, left: position.x, width, zIndex }
+    ? { top: 0, left: 0, width: '100%', height: 'calc(100vh - 36px)', zIndex, display: minimized ? 'none' : 'flex' }
+    : { top: position.y, left: position.x, width, zIndex, display: minimized ? 'none' : 'flex' }
 
   return (
     <div
@@ -82,7 +84,7 @@ export default function RetroWindow({
           <span className="truncate text-[12px]">{title}</span>
         </div>
         <div className="flex gap-[2px]">
-          <button className="retro-title-btn" title="Minimize">
+          <button className="retro-title-btn" onClick={() => onMinimize && onMinimize(id)} title="Minimize">
             <span className="leading-none" style={{ fontSize: '8px' }}>_</span>
           </button>
           <button className="retro-title-btn" onClick={handleMaximize} title="Maximize">

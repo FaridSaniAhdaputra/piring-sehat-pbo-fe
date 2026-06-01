@@ -42,6 +42,13 @@ export default function AuthWindow() {
   // ─── Login Handler ───
   const handleLogin = async (e) => {
     e.preventDefault()
+    
+    // Client-side validation to reduce unnecessary authentication request load
+    if (loginPayload.password.length < 6) {
+      setStatusMessage('Error: Password minimal harus 6 karakter!')
+      return
+    }
+
     setStatusMessage('Logging in...')
 
     const { data, error } = await loginWithEmail(loginPayload.email, loginPayload.password)
@@ -57,6 +64,16 @@ export default function AuthWindow() {
   // ─── Register Handler ───
   const handleRegister = async (e) => {
     e.preventDefault()
+    
+    // Client-side validations
+    if (registerPayload.username.trim().length < 3) {
+      setStatusMessage('Error: Username minimal harus 3 karakter!')
+      return
+    }
+    if (registerPayload.password.length < 6) {
+      setStatusMessage('Error: Password minimal harus 6 karakter!')
+      return
+    }
     if (registerPayload.password !== registerPayload.confirmPassword) {
       setStatusMessage('Error: Passwords do not match!')
       return

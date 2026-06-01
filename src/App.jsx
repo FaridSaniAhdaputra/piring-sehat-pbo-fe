@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "./hooks/useAuth";
 import RetroWindow from "./components/ui/RetroWindow";
+import RetroAlert from "./components/ui/RetroAlert";
 import AuthWindow from "./components/auth/AuthWindow";
 import HealthCalculatorContainer from "./components/calculator/HealthCalculatorContainer";
 import CalorieTracker from "./components/calories/CalorieTracker";
@@ -14,6 +15,7 @@ export default function App() {
   const [activeWindowId, setActiveWindowId] = useState(null);
   const [startMenuOpen, setStartMenuOpen] = useState(false);
   const [time, setTime] = useState(new Date());
+  const [alertMessage, setAlertMessage] = useState(null);
 
   // Clock
   useEffect(() => {
@@ -65,7 +67,7 @@ export default function App() {
   };
 
   // Daftar fitur yang memerlukan login sebelum bisa diakses
-  const protectedApps = ["calculator", "calories", "food", "forum"];
+  const protectedApps = ["calculator", "calories", "food"];
 
   const openWindow = (appId) => {
     setStartMenuOpen(false);
@@ -73,24 +75,26 @@ export default function App() {
     // Proteksi Auth: Jika user belum login dan mencoba membuka fitur terproteksi,
     // tampilkan peringatan bergaya Win95 dan buka jendela Login sebagai gantinya.
     if (protectedApps.includes(appId) && !user) {
-      alert(
-        "⚠️ Access Denied\n\nAnda harus login terlebih dahulu untuk mengakses fitur ini.",
-      );
+      setAlertMessage("Anda harus login terlebih dahulu untuk mengakses fitur ini.");
       appId = "auth";
     }
     setActiveWindowId(appId);
     setWindows((prevWindows) => {
-      let newWindows = prevWindows;
-      if (!prevWindows.find((w) => w.id === appId)) {
-        newWindows = [
-          ...prevWindows,
-          { ...apps[appId], zIndex: prevWindows.length + 1 },
+      const existing = prevWindows.find((w) => w.id === appId);
+      if (existing) {
+        // Jika sudah terbuka, kembalikan ke kondisi terlihat (restore) dan fokus
+        return prevWindows.map((w) => ({
+          ...w,
+          minimized: w.id === appId ? false : w.minimized,
+          zIndex: w.id === appId ? 999 : w.zIndex > 0 ? w.zIndex - 1 : 0,
+        }));
+      } else {
+        // Jika baru dibuka
+        return [
+          ...prevWindows.map((w) => ({ ...w, zIndex: w.zIndex > 0 ? w.zIndex - 1 : 0 })),
+          { ...apps[appId], zIndex: 999, minimized: false },
         ];
       }
-      return newWindows.map((w) => ({
-        ...w,
-        zIndex: w.id === appId ? 999 : w.zIndex > 0 ? w.zIndex - 1 : 0,
-      }));
     });
   };
 
@@ -104,9 +108,32 @@ export default function App() {
     setWindows((prevWindows) =>
       prevWindows.map((w) => ({
         ...w,
+        minimized: w.id === appId ? false : w.minimized,
         zIndex: w.id === appId ? 999 : w.zIndex > 0 ? w.zIndex - 1 : 0,
       })),
     );
+  };
+
+  const minimizeWindow = (appId) => {
+    setWindows((prevWindows) =>
+      prevWindows.map((w) =>
+        w.id === appId ? { ...w, minimized: true } : w
+      )
+    );
+    if (activeWindowId === appId) setActiveWindowId(null);
+  };
+
+  const handleTaskbarClick = (appId) => {
+    const targetWin = windows.find((w) => w.id === appId);
+    if (!targetWin) return;
+
+    if (activeWindowId === appId && !targetWin.minimized) {
+      // Jika jendela sedang aktif dan tidak minimize, klik akan meminimalisir
+      minimizeWindow(appId);
+    } else {
+      // Jika tidak aktif atau ter-minimize, restore dan berikan fokus
+      focusWindow(appId);
+    }
   };
 
   // Handle click outside start menu to close it
@@ -177,8 +204,10 @@ export default function App() {
             width={win.width}
             height={win.height}
             isActive={activeWindowId === win.id}
+            minimized={win.minimized}
             zIndex={win.zIndex}
             onClose={closeWindow}
+            onMinimize={minimizeWindow}
             onFocus={focusWindow}
           >
             <Component />
@@ -240,6 +269,7 @@ export default function App() {
       )}
 
       {/* Taskbar */}
+      {/* Taskbar */}
       <div className="retro-taskbar">
         <button
           className={`retro-start-btn ${startMenuOpen ? "active" : ""}`}
@@ -253,8 +283,8 @@ export default function App() {
           {windows.map((win) => (
             <button
               key={win.id}
-              className={`retro-taskbar-item ${activeWindowId === win.id ? "active" : ""}`}
-              onClick={() => focusWindow(win.id)}
+              className={`retro-taskbar-item ${activeWindowId === win.id && !win.minimized ? "active" : ""}`}
+              onClick={() => handleTaskbarClick(win.id)}
             >
               <span className="text-xs">{win.icon}</span>
               <span className="truncate">{win.title}</span>
@@ -272,6 +302,14 @@ export default function App() {
           {time.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
         </div>
       </div>
+
+      {alertMessage && (
+        <RetroAlert 
+          title="Access Denied"
+          message={alertMessage} 
+          onClose={() => setAlertMessage(null)} 
+        />
+      )}
     </div>
   );
 }
