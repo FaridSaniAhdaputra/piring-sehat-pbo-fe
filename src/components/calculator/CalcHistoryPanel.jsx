@@ -62,7 +62,7 @@ export default function CalcHistoryPanel({
               📭 {emptyLabel}
             </div>
           ) : (
-            <div className="overflow-x-auto retro-sunken">
+            <div className="overflow-auto max-h-[150px] retro-sunken">
               <table className="retro-table w-full text-[10px]">
                 <thead>
                   <tr style={{ background: "#000080", color: "#fff" }}>

@@ -1,17 +1,9 @@
-/* Desktop area */
-.desktop {
-  background: #008080;
-  height: 100vh;
-  position: relative;
-  overflow: hidden;
-}
-
-.desktop-icons {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  gap: 16px;
-  padding: 16px;
-  height: calc(100vh - 52px);
-  align-content: flex-start;
-}
+/*
+ * ============================================================================
+ * STYLESHEET: App.css
+ * ============================================================================
+ * Seluruh penataan gaya tata letak utama desktop sekarang telah sepenuhnya
+ * di-inline menggunakan utilitas TailwindCSS langsung di App.jsx.
+ * File ini dibiarkan kosong untuk kepatuhan dan kebersihan arsitektur Tailwind.
+ * ============================================================================
+ */

@@ -1,8 +1,13 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import RetroButton from './RetroButton'
+import { playErrorSound } from '../../utils/audioSynth'
 
 export default function RetroAlert({ message, onClose, title = "Error" }) {
+  useEffect(() => {
+    playErrorSound()
+  }, [])
+
   const modalContent = (
     <div className="fixed inset-0 flex items-center justify-center z-[9999]" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
       <div className="retro-window w-80 shadow-[2px_2px_10px_rgba(0,0,0,0.5)]" style={{ position: 'relative', margin: 'auto' }}>

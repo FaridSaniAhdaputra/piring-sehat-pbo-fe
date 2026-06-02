@@ -68,18 +68,19 @@ export default function ProteinCalculator() {
 
   const historyColumns = [
     "Waktu",
-    "BB (kg)",
+    "BB",
     "Aktivitas",
-    "Protein/hari",
-    "Kalori Protein",
+    "Protein",
+    "Kalori",
   ];
 
   const renderHistoryRow = (entry) => {
     const i = entry.inputData || {};
     const r = entry.resultData || {};
+    const formattedDate = entry.createdAt ? entry.createdAt.replace(", 2026", " 26") : "-";
     return (
       <>
-        <td className="px-2 py-1 whitespace-nowrap">{entry.createdAt}</td>
+        <td className="px-2 py-1 whitespace-nowrap">{formattedDate}</td>
         <td className="px-2 py-1">{i.weight ?? "-"}</td>
         <td className="px-2 py-1">
           {i.activityLevel ? `×${i.activityLevel} g/kg` : "-"}
