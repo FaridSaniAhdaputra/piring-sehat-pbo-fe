@@ -2,435 +2,431 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  /* ==========================================================================
+   * THEME FONDASI: CLASSIC TEAL (WINDOWS 95 DEFAULT)
+   * ========================================================================== */
+  --desktop-bg: #008080;
+  --window-bg: #c0c0c0;
+  --border-light: #dfdfdf;
+  --border-medium: #808080;
+  --border-dark: #404040;
+  --text-color: #000000;
+  --title-bar-start: #000080;
+  --title-bar-end: #1084d0;
+  --title-text-color: #ffffff;
+  --button-text-color: #000000;
+  --input-bg: #ffffff;
+  --statusbar-text: #000000;
+  --scroll-bg: #ffffff;
+  --systray-bg: #c0c0c0;
+  --retro-blue-accent: #000080;
+}
+
+/* ==========================================================================
+ * RETRO THEME #2: VAPORWAVE NEON SUNSET
+ * ========================================================================== */
+.theme-vaporwave {
+  --desktop-bg: #ff007f;
+  --window-bg: #2a085c;
+  --border-light: #ff00ff;
+  --border-medium: #b000b0;
+  --border-dark: #0f0022;
+  --text-color: #00ffff;
+  --title-bar-start: #b000b0;
+  --title-bar-end: #00ffff;
+  --title-text-color: #ffffff;
+  --button-text-color: #00ffff;
+  --input-bg: #0f0022;
+  --statusbar-text: #00ffff;
+  --scroll-bg: #1c023d;
+  --systray-bg: #2a085c;
+  --retro-blue-accent: #ff00ff;
+}
+
+/* ==========================================================================
+ * RETRO THEME #3: MATRIX TERMINAL CASCADING
+ * ========================================================================== */
+.theme-matrix {
+  --desktop-bg: #000000;
+  --window-bg: #071508;
+  --border-light: #00ff00;
+  --border-medium: #008000;
+  --border-dark: #001a00;
+  --text-color: #33ff33;
+  --title-bar-start: #005000;
+  --title-bar-end: #00ff00;
+  --title-text-color: #000000;
+  --button-text-color: #33ff33;
+  --input-bg: #000c00;
+  --statusbar-text: #33ff33;
+  --scroll-bg: #000c00;
+  --systray-bg: #071508;
+  --retro-blue-accent: #00ff00;
+}
+
+/* ==========================================================================
+ * RETRO THEME #4: RETRO DARK MODE
+ * ========================================================================== */
+.theme-dark {
+  --desktop-bg: #121212;
+  --window-bg: #242424;
+  --border-light: #444444;
+  --border-medium: #1f1f1f;
+  --border-dark: #0a0a0a;
+  --text-color: #e0e0e0;
+  --title-bar-start: #1f1f1f;
+  --title-bar-end: #383838;
+  --title-text-color: #e0e0e0;
+  --button-text-color: #e0e0e0;
+  --input-bg: #1c1c1c;
+  --statusbar-text: #b5b5b5;
+  --scroll-bg: #1c1c1c;
+  --systray-bg: #242424;
+  --retro-blue-accent: #383838;
+}
+
 @layer base {
   *, *::before, *::after {
     box-sizing: border-box;
   }
 
   body {
-    margin: 0;
-    font-family: 'Tahoma', 'MS Sans Serif', 'Arial', sans-serif;
-    font-size: 12px;
+    @apply m-0 overflow-hidden h-screen font-sans text-xs select-none;
+    background-color: var(--desktop-bg);
+    color: var(--text-color);
     line-height: 1.3;
     -webkit-font-smoothing: none;
-    background: #008080;
-    overflow: hidden;
-    height: 100vh;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
   #root {
-    height: 100vh;
-    overflow: hidden;
-    position: relative;
+    @apply h-screen overflow-hidden relative;
   }
 }
 
 @layer components {
-  /* === RAISED 3D BORDER (buttons, windows) === */
+  /* === RAISED 3D BORDER (buttons, windows, widgets) === */
   .retro-raised {
-    background-color: #c0c0c0;
-    border: 2px solid;
-    border-color: #dfdfdf #404040 #404040 #dfdfdf;
-    box-shadow: 1px 1px 0 #000, inset 1px 1px 0 #fff;
+    @apply bg-[var(--window-bg)] border-2;
+    border-color: var(--border-light) var(--border-dark) var(--border-dark) var(--border-light);
+    box-shadow: 1px 1px 0 #000, inset 1px 1px 0 var(--border-light);
   }
 
-  /* === SUNKEN 3D BORDER (inputs, status bars) === */
+  /* === SUNKEN 3D BORDER (inputs, status bars, progress bars) === */
   .retro-sunken {
-    border: 2px solid;
-    border-color: #808080 #dfdfdf #dfdfdf #808080;
-    box-shadow: inset 1px 1px 0 #404040;
+    @apply border-2;
+    border-color: var(--border-medium) var(--border-light) var(--border-light) var(--border-medium);
+    box-shadow: inset 1px 1px 0 var(--border-dark);
   }
 
   /* === BUTTON === */
   .retro-btn {
-    background-color: #c0c0c0;
-    border: 2px solid;
-    border-color: #dfdfdf #404040 #404040 #dfdfdf;
-    box-shadow: 1px 1px 0 #000, inset 1px 1px 0 #fff;
-    padding: 3px 16px;
+    @apply bg-[var(--window-bg)] border-2 px-4 py-[3px] text-xs cursor-pointer select-none text-center outline-none inline-flex items-center justify-center font-sans min-w-[75px];
+    color: var(--button-text-color);
+    border-color: var(--border-light) var(--border-dark) var(--border-dark) var(--border-light);
+    box-shadow: 1px 1px 0 #000, inset 1px 1px 0 var(--border-light);
     font-family: inherit;
-    font-size: 12px;
-    cursor: pointer;
-    min-width: 75px;
-    text-align: center;
-    outline: none;
-    position: relative;
   }
 
   .retro-btn:active {
-    border-color: #404040 #dfdfdf #dfdfdf #404040;
-    box-shadow: inset 1px 1px 0 #808080;
-    padding: 4px 15px 2px 17px;
+    @apply py-[4px] pr-[15px] pl-[17px] pb-[2px];
+    border-color: var(--border-dark) var(--border-light) var(--border-light) var(--border-dark);
+    box-shadow: inset 1px 1px 0 var(--border-medium);
   }
 
   .retro-btn:focus-visible {
-    outline: 1px dotted #000;
+    @apply outline-none;
+    outline: 1px dotted var(--text-color);
     outline-offset: -4px;
   }
 
   .retro-btn-primary {
-    font-weight: bold;
-    box-shadow: 1px 1px 0 #000, inset 1px 1px 0 #fff, 0 0 0 1px #000;
+    @apply font-bold;
+    box-shadow: 1px 1px 0 #000, inset 1px 1px 0 var(--border-light), 0 0 0 1px #000;
   }
 
   /* === INPUT === */
   .retro-input {
-    background: #fff;
-    border: 2px solid;
-    border-color: #808080 #dfdfdf #dfdfdf #808080;
-    box-shadow: inset 1px 1px 0 #404040;
-    padding: 3px 4px;
-    font-family: inherit;
-    font-size: 12px;
-    outline: none;
-    width: 100%;
+    @apply bg-[var(--input-bg)] border-2 px-1 py-[3px] text-xs outline-none w-full font-sans;
+    color: var(--text-color);
+    border-color: var(--border-medium) var(--border-light) var(--border-light) var(--border-medium);
+    box-shadow: inset 1px 1px 0 var(--border-dark);
   }
 
   .retro-input:focus {
-    outline: none;
+    @apply outline-none;
   }
 
   /* === TITLE BAR === */
   .retro-titlebar {
-    background: linear-gradient(90deg, #000080, #1084d0);
-    color: #fff;
-    padding: 2px 3px;
-    font-size: 12px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    user-select: none;
-    height: 22px;
+    @apply flex items-center justify-between h-[22px] p-1 font-bold text-xs select-none;
+    background: linear-gradient(90deg, var(--title-bar-start), var(--title-bar-end));
+    color: var(--title-text-color);
   }
 
   .retro-titlebar-inactive {
-    background: linear-gradient(90deg, #808080, #b0b0b0);
+    background: linear-gradient(90deg, var(--border-medium), #b0b0b0);
   }
 
   /* === TITLE BAR BUTTONS === */
   .retro-title-btn {
-    background: #c0c0c0;
-    border: 2px solid;
-    border-color: #dfdfdf #404040 #404040 #dfdfdf;
-    box-shadow: inset 1px 1px 0 #fff;
-    width: 16px;
-    height: 14px;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 9px;
-    font-weight: bold;
-    cursor: pointer;
+    @apply bg-[var(--window-bg)] border-2 w-4 h-[14px] p-0 flex items-center justify-center text-[9px] font-bold cursor-pointer select-none outline-none;
+    color: var(--button-text-color);
+    border-color: var(--border-light) var(--border-dark) var(--border-dark) var(--border-light);
+    box-shadow: inset 1px 1px 0 var(--border-light);
     line-height: 1;
-    font-family: inherit;
   }
 
   .retro-title-btn:active {
-    border-color: #404040 #dfdfdf #dfdfdf #404040;
-    box-shadow: inset 1px 1px 0 #808080;
+    border-color: var(--border-dark) var(--border-light) var(--border-light) var(--border-dark);
+    box-shadow: inset 1px 1px 0 var(--border-medium);
   }
 
   /* === WINDOW === */
   .retro-window {
-    background-color: #c0c0c0;
-    border: 2px solid;
-    border-color: #dfdfdf #404040 #404040 #dfdfdf;
-    box-shadow: 2px 2px 0 #000, inset 1px 1px 0 #fff;
-    position: absolute;
-    display: flex;
-    flex-direction: column;
+    @apply flex flex-col bg-[var(--window-bg)] border-2 absolute shadow-md;
+    border-color: var(--border-light) var(--border-dark) var(--border-dark) var(--border-light);
+    box-shadow: 2px 2px 0 #000, inset 1px 1px 0 var(--border-light);
+    color: var(--text-color);
   }
 
   /* === TABS === */
   .retro-tab {
-    background: #c0c0c0;
-    border: 2px solid;
-    border-color: #dfdfdf #404040 #404040 #dfdfdf;
-    box-shadow: inset 1px 1px 0 #fff;
-    padding: 3px 12px;
-    font-size: 12px;
-    cursor: pointer;
-    position: relative;
-    bottom: -2px;
-    font-family: inherit;
-    outline: none;
+    @apply bg-[var(--window-bg)] border-2 px-3 py-[3px] text-xs cursor-pointer select-none relative -bottom-[2px] outline-none;
+    color: var(--text-color);
+    border-color: var(--border-light) var(--border-dark) var(--border-dark) var(--border-light);
+    box-shadow: inset 1px 1px 0 var(--border-light);
   }
 
   .retro-tab-active {
-    border-bottom-color: #c0c0c0;
-    z-index: 1;
-    padding-bottom: 5px;
-    font-weight: bold;
+    @apply font-bold pb-[5px] z-[1];
+    border-bottom-color: var(--window-bg);
   }
 
   /* === STATUS BAR === */
   .retro-statusbar {
-    border-top: 2px solid #dfdfdf;
-    padding: 2px 4px;
-    font-size: 11px;
-    display: flex;
-    gap: 4px;
+    @apply flex gap-1 p-[2px] px-1 text-[11px] border-t-2;
+    border-top-color: var(--border-light);
+    color: var(--statusbar-text);
   }
 
   .retro-statusbar-section {
-    border: 1px solid;
-    border-color: #808080 #dfdfdf #dfdfdf #808080;
-    padding: 1px 6px;
-    flex: 1;
+    @apply border p-[1px] px-[6px] flex-1;
+    border-color: var(--border-medium) var(--border-light) var(--border-light) var(--border-medium);
   }
 
-  /* === SCROLLBAR-like area === */
+  /* === SCROLLBAR AREA === */
   .retro-scroll-area {
-    border: 2px solid;
-    border-color: #808080 #dfdfdf #dfdfdf #808080;
-    box-shadow: inset 1px 1px 0 #404040;
-    background: #fff;
-    overflow-y: auto;
-    padding: 2px;
+    @apply border-2 overflow-y-auto p-[2px] bg-[var(--scroll-bg)];
+    border-color: var(--border-medium) var(--border-light) var(--border-light) var(--border-medium);
+    box-shadow: inset 1px 1px 0 var(--border-dark);
+    color: var(--text-color);
   }
 
   /* === GROUP BOX === */
   .retro-groupbox {
-    border: 2px solid;
-    border-color: #808080 #dfdfdf #dfdfdf #808080;
-    padding: 12px 8px 8px;
-    position: relative;
-    margin-top: 8px;
+    @apply relative border-2 p-3 mt-2;
+    border-color: var(--border-medium) var(--border-light) var(--border-light) var(--border-medium);
   }
 
   .retro-groupbox-label {
-    position: absolute;
-    top: -8px;
-    left: 8px;
-    background: #c0c0c0;
-    padding: 0 4px;
-    font-size: 12px;
+    @apply absolute -top-2 left-2 bg-[var(--window-bg)] px-1 text-xs select-none;
+    color: var(--text-color);
   }
 
   /* === PROGRESS BAR === */
   .retro-progress {
-    border: 2px solid;
-    border-color: #808080 #dfdfdf #dfdfdf #808080;
-    box-shadow: inset 1px 1px 0 #404040;
-    height: 20px;
-    background: #c0c0c0;
-    padding: 2px;
+    @apply border-2 h-5 bg-[var(--window-bg)] p-[2px] relative;
+    border-color: var(--border-medium) var(--border-light) var(--border-light) var(--border-medium);
+    box-shadow: inset 1px 1px 0 var(--border-dark);
   }
 
   .retro-progress-fill {
-    background: #000080;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    transition: width 0.3s ease;
+    @apply h-full flex items-center bg-[var(--title-bar-start)] transition-all duration-300;
   }
 
   /* === TASKBAR === */
   .retro-taskbar {
-    background: #c0c0c0;
-    border-top: 2px solid;
-    border-color: #dfdfdf #404040 #404040 #dfdfdf;
-    box-shadow: inset 0 1px 0 #fff;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    padding: 2px 4px;
-    gap: 4px;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 9999;
+    @apply bg-[var(--window-bg)] border-t-2 flex items-center h-9 p-1 gap-1 absolute bottom-0 left-0 right-0 z-[9999];
+    border-color: var(--border-light) var(--border-dark) var(--border-dark) var(--border-light);
+    box-shadow: inset 0 1px 0 var(--border-light);
+    transform: translate3d(0, 0, 50px);
   }
 
   /* === START BUTTON === */
   .retro-start-btn {
-    background: #c0c0c0;
-    border: 2px solid;
-    border-color: #dfdfdf #404040 #404040 #dfdfdf;
-    box-shadow: 1px 1px 0 #000, inset 1px 1px 0 #fff;
-    padding: 2px 6px;
-    font-weight: bold;
-    font-size: 12px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    height: 28px;
-    font-family: inherit;
-    outline: none;
+    @apply bg-[var(--window-bg)] border-2 px-1.5 py-0.5 font-bold text-xs cursor-pointer flex items-center gap-1 h-7 outline-none;
+    border-color: var(--border-light) var(--border-dark) var(--border-dark) var(--border-light);
+    box-shadow: 1px 1px 0 #000, inset 1px 1px 0 var(--border-light);
+    color: var(--button-text-color);
   }
 
   .retro-start-btn:active,
   .retro-start-btn.active {
-    border-color: #404040 #dfdfdf #dfdfdf #404040;
-    box-shadow: inset 1px 1px 0 #808080;
+    border-color: var(--border-dark) var(--border-light) var(--border-light) var(--border-dark);
+    box-shadow: inset 1px 1px 0 var(--border-medium);
   }
 
   /* === TASKBAR ITEM === */
   .retro-taskbar-item {
-    background: #c0c0c0;
-    border: 2px solid;
-    border-color: #dfdfdf #404040 #404040 #dfdfdf;
-    box-shadow: inset 1px 1px 0 #fff;
-    padding: 2px 8px;
-    font-size: 11px;
-    cursor: pointer;
-    height: 28px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    min-width: 120px;
-    max-width: 160px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-family: inherit;
-    outline: none;
+    @apply bg-[var(--window-bg)] border-2 px-2 py-0.5 text-[11px] cursor-pointer flex items-center gap-1 h-7 min-w-[120px] max-w-[160px] overflow-hidden truncate whitespace-nowrap outline-none;
+    border-color: var(--border-light) var(--border-dark) var(--border-dark) var(--border-light);
+    box-shadow: inset 1px 1px 0 var(--border-light);
+    color: var(--button-text-color);
   }
 
   .retro-taskbar-item.active {
-    border-color: #404040 #dfdfdf #dfdfdf #404040;
-    box-shadow: inset 1px 1px 0 #808080;
-    font-weight: bold;
-    background: repeating-conic-gradient(#c0c0c0 0% 25%, #fff 0% 50%) 0 0 / 2px 2px;
+    @apply font-bold;
+    border-color: var(--border-dark) var(--border-light) var(--border-light) var(--border-dark);
+    box-shadow: inset 1px 1px 0 var(--border-medium);
+    background: repeating-conic-gradient(var(--window-bg) 0% 25%, var(--border-light) 0% 50%) 0 0 / 2px 2px;
   }
 
   /* === SYSTEM TRAY === */
   .retro-systray {
-    margin-left: auto;
-    border: 2px solid;
-    border-color: #808080 #dfdfdf #dfdfdf #808080;
-    padding: 2px 8px;
-    font-size: 11px;
-    height: 28px;
-    display: flex;
-    align-items: center;
+    @apply border-2 flex items-center h-7 px-2 ml-auto text-[11px] bg-[var(--systray-bg)];
+    border-color: var(--border-medium) var(--border-light) var(--border-light) var(--border-medium);
   }
 
   /* === START MENU === */
   .retro-start-menu {
-    background: #c0c0c0;
-    border: 2px solid;
-    border-color: #dfdfdf #404040 #404040 #dfdfdf;
-    box-shadow: 2px 2px 0 #000, inset 1px 1px 0 #fff;
-    position: absolute;
-    bottom: 36px;
-    left: 2px;
-    width: 220px;
-    z-index: 10000;
+    @apply bg-[var(--window-bg)] border-2 w-[220px] absolute bottom-9 left-[2px] z-[10000] flex shadow-lg;
+    border-color: var(--border-light) var(--border-dark) var(--border-dark) var(--border-light);
+    box-shadow: 2px 2px 0 #000, inset 1px 1px 0 var(--border-light);
   }
 
   .retro-start-menu-sidebar {
-    background: linear-gradient(180deg, #000080, #1084d0);
-    width: 24px;
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    padding-bottom: 4px;
+    @apply w-6 absolute left-0 top-0 bottom-0 flex items-end justify-center pb-1 select-none;
+    background: linear-gradient(180deg, var(--title-bar-start), var(--title-bar-end));
   }
 
   .retro-start-menu-sidebar span {
-    color: #c0c0c0;
-    font-weight: bold;
-    font-size: 14px;
+    @apply font-bold text-sm tracking-widest text-[var(--title-text-color)];
     writing-mode: vertical-rl;
     transform: rotate(180deg);
-    letter-spacing: 2px;
   }
 
   .retro-start-menu-items {
-    margin-left: 24px;
-    padding: 2px 0;
+    @apply ml-6 py-[2px] flex-1;
   }
 
   .retro-start-menu-item {
-    padding: 6px 12px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 12px;
-    border: none;
-    background: none;
-    width: 100%;
-    text-align: left;
-    font-family: inherit;
+    @apply w-full px-3 py-1.5 flex items-center gap-[10px] text-left text-xs bg-none border-none outline-none cursor-pointer;
+    color: var(--button-text-color);
   }
 
   .retro-start-menu-item:hover {
-    background: #000080;
-    color: #fff;
+    @apply text-[var(--title-text-color)];
+    background-color: var(--title-bar-start);
   }
 
   .retro-start-menu-divider {
-    border-top: 1px solid #808080;
-    border-bottom: 1px solid #fff;
-    margin: 2px 4px;
+    @apply border-t my-[2px] mx-1;
+    border-top-color: var(--border-medium);
+    border-bottom: 1px solid var(--border-light);
   }
 
   /* === DESKTOP ICON === */
   .retro-desktop-icon {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    cursor: pointer;
-    padding: 4px;
-    width: 80px;
-    text-align: center;
+    @apply flex flex-col items-center gap-1 cursor-pointer p-1 w-[85px] text-center outline-none border-none bg-transparent;
   }
 
   .retro-desktop-icon span {
-    color: #fff;
-    font-size: 11px;
+    @apply text-[11px] leading-tight select-none text-white font-sans;
     text-shadow: 1px 1px 1px #000;
     word-break: break-word;
-    line-height: 1.2;
-  }
-
-  .retro-desktop-icon:focus,
-  .retro-desktop-icon.selected {
-    outline: none;
   }
 
   .retro-desktop-icon:focus span,
   .retro-desktop-icon.selected span {
-    background: #000080;
-    color: #fff;
+    @apply text-[var(--title-text-color)] bg-[var(--title-bar-start)];
     text-shadow: none;
   }
 
   /* === TABLE === */
   .retro-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 12px;
+    @apply w-full border-collapse text-xs bg-transparent;
+    color: var(--text-color);
   }
 
   .retro-table th {
-    background: #c0c0c0;
-    border: 2px solid;
-    border-color: #dfdfdf #404040 #404040 #dfdfdf;
-    padding: 2px 8px;
-    text-align: left;
-    font-weight: bold;
-    cursor: default;
+    @apply bg-[var(--window-bg)] border-2 p-1 px-2 text-left font-bold select-none;
+    border-color: var(--border-light) var(--border-dark) var(--border-dark) var(--border-light);
   }
 
   .retro-table td {
-    padding: 2px 8px;
-    border-bottom: 1px solid #c0c0c0;
+    @apply p-1 px-2 border-b;
+    border-bottom-color: var(--border-medium);
   }
 
   .retro-table tr:hover td {
-    background: #000080;
-    color: #fff;
+    @apply text-[var(--title-text-color)];
+    background-color: var(--title-bar-start);
   }
+}
+
+/* ==========================================================================
+ * DYNAMIC WALLPAPERS & RETRO GLOW EFFECTS
+ * ========================================================================== */
+
+/* Wallpaper Grid Synthwave */
+.wallpaper-synthwave {
+  @apply relative overflow-hidden z-[0] !important;
+  background: linear-gradient(180deg, #120136 0%, #03001e 60%, #400030 100%) !important;
+}
+
+.wallpaper-synthwave::before {
+  content: "";
+  @apply absolute -left-1/2 -right-1/2 -bottom-1/2 top-[40%] z-[-1];
+  background-image: 
+    linear-gradient(90deg, rgba(255, 0, 127, 0.25) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(255, 0, 127, 0.25) 1px, transparent 1px);
+  background-size: 40px 40px;
+  transform: perspective(300px) rotateX(60deg) translateZ(-100px);
+  transform-origin: top center;
+  animation: grid-scroll 24s linear infinite;
+}
+
+/* Wallpaper Matrix Cascade */
+.wallpaper-matrix {
+  @apply bg-black !important;
+}
+
+/* Wallpaper Teal Classic */
+.wallpaper-classic {
+  @apply bg-[#008080] !important;
+  background-image: none !important;
+}
+
+/* Wallpaper Grid Classic Win95 (Subtle Dot Pattern) */
+.wallpaper-grid {
+  @apply bg-[#008080] !important;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 0);
+  background-size: 8px 8px;
+}
+
+@keyframes grid-scroll {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 1000px;
+  }
+}
+
+/* Modern CRT Scanline Layer */
+.crt-overlay {
+  @apply fixed inset-0 z-[999999] pointer-events-none opacity-[0.45];
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.08) 50%);
+  background-size: 100% 3px;
+}
+
+/* Hover glowing effects for retro buttons */
+.retro-btn:hover {
+  filter: brightness(1.05);
+}
+
+.retro-window {
+  box-shadow: 4px 4px 0 #000000;
 }

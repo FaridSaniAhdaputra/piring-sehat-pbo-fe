@@ -80,12 +80,12 @@ export default function BMICalculator() {
 
   const historyColumns = [
     "Waktu",
-    "BB (kg)",
-    "TB (cm)",
-    "Kelamin",
+    "BB",
+    "TB",
+    "L/P",
     "BMI",
     "Kategori",
-    "Kalori/hari",
+    "Kalori",
   ];
 
   // Render satu baris tabel riwayat BMI
@@ -93,9 +93,10 @@ export default function BMICalculator() {
   const renderHistoryRow = (entry) => {
     const i = entry.inputData || {};
     const r = entry.resultData || {};
+    const formattedDate = entry.createdAt ? entry.createdAt.replace(", 2026", " 26") : "-";
     return (
       <>
-        <td className="px-2 py-1 whitespace-nowrap">{entry.createdAt}</td>
+        <td className="px-2 py-1 whitespace-nowrap">{formattedDate}</td>
         <td className="px-2 py-1">{i.weight ?? "-"}</td>
         <td className="px-2 py-1">{i.height ?? "-"}</td>
         <td className="px-2 py-1">

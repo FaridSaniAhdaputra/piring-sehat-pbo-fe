@@ -12,6 +12,8 @@ const AuthContext = createContext({
   backendProfile: null,
   backendError: null, // Menyimpan pesan error detail dari backend
   loading: true,
+  isRecoveryFlow: false,
+  setIsRecoveryFlow: () => {},
   loginWithEmail: async () => {},
   registerWithEmail: async () => {},
   loginWithGoogle: async () => {},
@@ -29,6 +31,7 @@ export function AuthProvider({ children }) {
   const [backendProfile, setBackendProfile] = useState(null)
   const [backendError, setBackendError] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [isRecoveryFlow, setIsRecoveryFlow] = useState(false)
 
   // ─── Query Database Supabase: SELECT * FROM user_profiles WHERE id = ? ───
   const fetchUserProfile = async (userId) => {
@@ -79,19 +82,32 @@ export function AuthProvider({ children }) {
   }
 
   useEffect(() => {
+    // Deteksi awal jika ada hash type=recovery pada saat mount pertama kali
+    if (window.location.hash && window.location.hash.includes('type=recovery')) {
+      setIsRecoveryFlow(true)
+    }
+
     // Dengarkan perubahan auth (termasuk inisialisasi awal lewat event INITIAL_SESSION)
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       setSession(session)
       const currentUser = session?.user ?? null
       setUser(currentUser)
 
+      if (event === 'PASSWORD_RECOVERY') {
+        setIsRecoveryFlow(true)
+      }
+
+      if (event === 'SIGNED_OUT') {
+        setIsRecoveryFlow(false)
+      }
+
       if (currentUser) {
-        // 1. Ambil data profil dari database
-        await fetchUserProfile(currentUser.id)
+        // 1. Ambil data profil dari database (non-blocking)
+        fetchUserProfile(currentUser.id)
         
-        // 2. Hubungi backend Spring Boot untuk verifikasi JWT
+        // 2. Hubungi backend Spring Boot untuk verifikasi JWT (non-blocking)
         if (session?.access_token) {
-          await fetchBackendProfile(session.access_token)
+          fetchBackendProfile(session.access_token)
         }
       } else {
         setProfile(null)
@@ -191,12 +207,13 @@ export function AuthProvider({ children }) {
     setSession(null)
     setProfile(null)
     setBackendProfile(null)
+    setIsRecoveryFlow(false)
     setLoading(false)
 
     // LANGKAH 2: Coba beritahu cloud Supabase secara terpisah di latar belakang
     // Jika gagal (misalnya koneksi mati), tidak masalah karena UI sudah bersih
     try {
-      await supabase.auth.signOut()
+      supabase.auth.signOut()
     } catch (err) {
       console.warn('[Logout] Cloud signOut gagal (tidak masalah, state lokal sudah bersih):', err.message)
     }
@@ -228,6 +245,22 @@ export function AuthProvider({ children }) {
     }
   }
 
+  // J. Fitur Ubah Password Baru
+  const updatePassword = async (newPassword) => {
+    setLoading(true)
+    try {
+      const { data, error } = await supabase.auth.updateUser({
+        password: newPassword,
+      })
+      if (error) throw error
+      return { data, error: null }
+    } catch (err) {
+      return { data: null, error: err }
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const value = {
     user,
     session,
@@ -235,6 +268,8 @@ export function AuthProvider({ children }) {
     backendProfile,
     backendError, // Ekspor status error detail
     loading,
+    isRecoveryFlow,
+    setIsRecoveryFlow,
     loginWithEmail,
     registerWithEmail,
     loginWithGoogle,
@@ -242,7 +277,8 @@ export function AuthProvider({ children }) {
     logout,
     refreshProfile,
     fetchBackendProfile,
-    resetPassword // Ekspor fitur lupa password
+    resetPassword, // Ekspor fitur lupa password
+    updatePassword // Ekspor fitur ubah password baru
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

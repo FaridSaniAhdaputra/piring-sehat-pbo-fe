@@ -65,9 +65,9 @@ export default function GeneticHeightCalculator() {
 
   const historyColumns = [
     "Waktu",
-    "Tinggi Ayah",
-    "Tinggi Ibu",
-    "Jenis Kelamin",
+    "Ayah",
+    "Ibu",
+    "L/P",
     "Prediksi",
     "Rentang",
   ];
@@ -75,20 +75,21 @@ export default function GeneticHeightCalculator() {
   const renderHistoryRow = (entry) => {
     const i = entry.inputData || {};
     const r = entry.resultData || {};
+    const formattedDate = entry.createdAt ? entry.createdAt.replace(", 2026", " 26") : "-";
     return (
       <>
-        <td className="px-2 py-1 whitespace-nowrap">{entry.createdAt}</td>
+        <td className="px-2 py-1 whitespace-nowrap">{formattedDate}</td>
         <td className="px-2 py-1">
-          {i.fatherHeight ? `${i.fatherHeight} cm` : "-"}
+          {i.fatherHeight ?? "-"}
         </td>
         <td className="px-2 py-1">
-          {i.motherHeight ? `${i.motherHeight} cm` : "-"}
+          {i.motherHeight ?? "-"}
         </td>
         <td className="px-2 py-1">
-          {i.gender === "male" ? "♂ Laki-laki" : "♀ Perempuan"}
+          {i.gender === "male" ? "♂" : i.gender === "female" ? "♀" : "-"}
         </td>
         <td className="px-2 py-1 font-bold text-[#000080]">
-          {r.predictedHeight ? `${r.predictedHeight} cm` : "-"}
+          {r.predictedHeight ?? "-"}
         </td>
         <td className="px-2 py-1 text-[9px]">{r.range ?? "-"}</td>
       </>
