@@ -24,8 +24,9 @@ export default function FoodSearchExplorer() {
     setStatusMessage(`Searching for "${q}"...`)
 
     try {
-      // PERHATIKAN: URL disesuaikan dengan port Spring Boot Anda (biasanya 8080)
-      const response = await fetch(`http://localhost:8080/api/nutrition/search?q=${q}`);
+      // Menggunakan environment variable agar bisa jalan di Vercel maupun Local
+      const API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
+      const response = await fetch(`${API_URL}/api/nutrition/search?q=${q}`);
       
       if (!response.ok) {
         throw new Error(`Gagal mengambil data dari server (Status: ${response.status})`);
