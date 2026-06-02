@@ -174,7 +174,7 @@ export default function App() {
       icon: <DisplaySettingsIcon size={16} />,
       component: DisplayProperties,
       width: 440,
-      height: 510, // Pas dengan monitor preview, tab, dan tombol aksi tanpa scrollbar
+      height: 900, // Cukup untuk semua tab termasuk Appearance tanpa scrollbar
     }
   };
 
