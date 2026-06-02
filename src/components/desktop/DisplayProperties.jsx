@@ -72,9 +72,9 @@ export default function DisplayProperties({
     }
 
     return (
-      <div className="flex flex-col items-center justify-center bg-[#eaeaea] p-4 border-2 border-gray-400 rounded-sm mb-4">
+      <div className="flex flex-col items-center justify-center bg-[#eaeaea] p-2 border-2 border-gray-400 rounded-sm mb-2">
         {/* Layar CRT Monitor Tabung */}
-        <div className="w-[180px] h-[120px] bg-black border-8 border-[#d3d3d3] shadow-md flex items-center justify-center relative overflow-hidden rounded-md" style={{ boxShadow: 'inset 2px 2px 5px rgba(0,0,0,0.8), 2px 2px 4px rgba(0,0,0,0.4)' }}>
+        <div className="w-[150px] h-[100px] bg-black border-8 border-[#d3d3d3] shadow-md flex items-center justify-center relative overflow-hidden rounded-md" style={{ boxShadow: 'inset 2px 2px 5px rgba(0,0,0,0.8), 2px 2px 4px rgba(0,0,0,0.4)' }}>
           {/* Latar Belakang Monitor Sesuai Pilihan Wallpaper */}
           <div className={`w-full h-full flex items-center justify-center p-2 relative ${previewClass}`}>
             
@@ -105,8 +105,8 @@ export default function DisplayProperties({
         </div>
 
         {/* Leher & Kaki Monitor CRT */}
-        <div className="w-[40px] h-[15px] bg-[#c0c0c0] border-x-2 border-gray-400" />
-        <div className="w-[80px] h-[8px] bg-[#b0b0b0] border-t border-white rounded-sm shadow-sm" />
+        <div className="w-[34px] h-[10px] bg-[#c0c0c0] border-x-2 border-gray-400" />
+        <div className="w-[70px] h-[6px] bg-[#b0b0b0] border-t border-white rounded-sm shadow-sm" />
       </div>
     );
   };
@@ -144,10 +144,10 @@ export default function DisplayProperties({
         
         {/* 1. CONTENT: BACKGROUND WALLPAPER */}
         {activeTab === 'background' && (
-          <div className="flex flex-col gap-3 h-full">
+          <div className="flex flex-col gap-2 h-full">
             <span className="font-bold text-[#000080]">🖼️ Desktop Wallpaper Pattern</span>
             <p className="text-[11px] text-gray-700">Pilih pola latar belakang visual yang ingin Anda terapkan pada desktop PiringSehat:</p>
-            <div className="retro-scroll-area flex-1 min-h-[100px] bg-white">
+            <div className="retro-scroll-area flex-1 min-h-[80px] bg-white">
               <div 
                 className={`p-2 cursor-pointer hover:bg-[#000080] hover:text-white ${tempWallpaper === 'classic' ? 'bg-[#000080] text-white font-bold' : ''}`}
                 onClick={() => setTempWallpaper('classic')}
@@ -178,7 +178,7 @@ export default function DisplayProperties({
 
         {/* 2. CONTENT: SCREEN SAVER TIMEOUT */}
         {activeTab === 'screensaver' && (
-          <div className="flex flex-col gap-3 h-full">
+          <div className="flex flex-col gap-2 h-full">
             <span className="font-bold text-[#000080]">🌌 Screen Saver Simulation</span>
             <div className="flex items-center gap-3">
               <input
@@ -207,7 +207,7 @@ export default function DisplayProperties({
               </select>
             </div>
 
-            <div className="retro-groupbox mt-3 p-3">
+            <div className="retro-groupbox mt-2 p-2">
               <span className="retro-groupbox-label font-bold text-[#000080]">Pratinjau Langsung</span>
               <p className="text-[11px] text-gray-600 mb-2">Ingin merasakan simulasi meluncur menembus luar angkasa bernada retro 8-bit secara layar penuh?</p>
               <RetroButton onClick={onTestScreensaver} className="w-full font-bold">
@@ -219,11 +219,11 @@ export default function DisplayProperties({
 
         {/* 3. CONTENT: APPEARANCE SCHEME TEMA */}
         {activeTab === 'appearance' && (
-          <div className="flex flex-col gap-3 h-full">
+          <div className="flex flex-col gap-2 h-full">
             <span className="font-bold text-[#000080]">🎨 System Color Theme Scheme</span>
             <p className="text-[11px] text-gray-700">Ganti tema warna keseluruhan sistem (jendela, tombol, font, judul bar) secara instan:</p>
             
-            <div className="retro-scroll-area flex-1 min-h-[90px] bg-white">
+            <div className="retro-scroll-area overflow-y-auto bg-white" style={{ maxHeight: '110px' }}>
               <div 
                 className={`p-2 cursor-pointer hover:bg-[#000080] hover:text-white ${tempTheme === 'theme-classic' ? 'bg-[#000080] text-white font-bold' : ''}`}
                 onClick={() => setTempTheme('theme-classic')}
@@ -270,7 +270,7 @@ export default function DisplayProperties({
         )}
 
         {/* ─── LOWER DIALOG ACTION BUTTONS ─── */}
-        <div className="flex justify-end gap-2 mt-4 pt-2 border-t border-gray-300">
+        <div className="flex justify-end gap-2 mt-2 pt-2 border-t border-gray-300">
           <RetroButton onClick={handleOK} primary className="w-20">
             OK
           </RetroButton>
