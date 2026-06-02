@@ -13,21 +13,28 @@ export default function FoodSearchExplorer() {
   const handleSearch = async (e) => {
     e.preventDefault()
     const q = searchQuery.trim()
-    if (!q) return
+    
+    if (!q) {
+      setResults([])
+      setStatusMessage('Ready')
+      return
+    }
 
     setLoading(true)
     setStatusMessage(`Searching for "${q}"...`)
 
     try {
-      const { data, error } = await supabase
-        .from('nutrition')
-        .select('*')
-        .ilike('name', `%${q}%`)
-        .limit(100)
+      // PERHATIKAN: URL disesuaikan dengan port Spring Boot Anda (biasanya 8080)
+      const response = await fetch(`http://localhost:8080/api/nutrition/search?q=${q}`);
+      
+      if (!response.ok) {
+        throw new Error(`Gagal mengambil data dari server (Status: ${response.status})`);
+      }
 
-      if (error) throw error
-
-      const mapped = (data || []).map((item) => ({
+      const json = await response.json();
+      
+      // Mengambil array data dari struktur JSON yang kita buat di Spring Boot
+      const mapped = (json.data || []).map((item) => ({
         id: item.id,
         name: item.name || '',
         servingSize: '1 Porsi', 
@@ -39,13 +46,19 @@ export default function FoodSearchExplorer() {
       }))
 
       setResults(mapped)
-      setStatusMessage(`Found ${mapped.length} results for "${q}"`)
+      
+      if (mapped.length === 0) {
+        setStatusMessage(`Tidak ada hasil untuk "${q}"`)
+      } else {
+        setStatusMessage(`Found ${mapped.length} results for "${q}"`)
+      }
+      
     } catch (err) {
-      console.error('[FoodSearch] Supabase error:', err)
-      setStatusMessage(`Error: ${err.message || 'Unknown error'}`)
+      console.error('[FoodSearch] Fetch error:', err)
+      setStatusMessage(`Error: ${err.message}`)
       setResults([])
     } finally {
-      setLoading(false)
+      setLoading(false) // Ini memastikan loading berhenti apapun yang terjadi
     }
   }
 
